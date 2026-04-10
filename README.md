@@ -1,5 +1,20 @@
 # Docling: Processing Multilingual Documents
 
+## Table of Contents
+
+- [Environment Setup](#environment-setup)
+- [Step 1 — Installing Tesseract OCR](#step-1--installing-tesseract-ocr)
+- [Step 2 — Setting Up Python Environment](#step-2--setting-up-python-environment)
+- [Step 3 — Installing Docling](#step-3--installing-docling)
+- [Step 4 — OCR Engines Used](#step-4--ocr-engines-used)
+- [Step 5 — Documents Tested](#step-5--documents-tested)
+- [Step 6 — Conversion Commands](#step-6--conversion-commands)
+- [Step 7 — Key Findings](#step-7--key-findings)
+- [Step 8 — OCR Engine Comparison](#step-8--ocr-engine-comparison)
+- [Step 9 — Challenges and Limitations](#step-9--challenges-and-limitations)
+- [Discussion](#discussion)
+- [Repository Structure](#repository-structure)
+- [References](#references)
 ## Overview
 
 This repository documents my exploration of [Docling](https://github.com/docling-project/docling)'s OCR capabilities for processing scanned documents in multiple languages. This work is part of the [Outreachy](https://www.outreachy.org/) contribution task for the Fedora/Ramalama project (Issue #123).
@@ -15,10 +30,6 @@ I completed this task on my personal MacBook Air with the following setup:
 - **Operating System:** macOS 14.4.1 (Apple Silicon M1)
 - **Python version:** 3.14.3
 - **Package manager:** Homebrew 5.1.0
-- **Docling version:** 2.82.0
-- **Docling Core version:** 2.70.2
-- **Docling IBM Models version:** 3.12.0
-- **Docling Parse version:** 5.6.1
 
 ---
 
@@ -28,7 +39,6 @@ I chose Tesseract as my primary OCR engine because it is the most widely used op
 
 ```bash
 brew install tesseract
-brew install tesseract-lang
 ```
 
 ![Tesseract Installation](screenshots/screenshot-1-tesseract-install.jpg)
@@ -42,14 +52,18 @@ tesseract --version
 ![Tesseract Version](screenshots/screenshot-2-tesseract-version.jpg)
 
 ```bash
-tesseract --list-langs
+brew install tesseract-lang
 ```
 
 ![Tesseract Languages](screenshots/screenshot-3-tesseract-langs.jpg)
 
+```bash
+tesseract --list-langs
+```
 ![Tesseract Language List](screenshots/screenshot-4-tesseract-list-langs.jpg)
 
-Both `fra` (French), `ita` (Italian) and `tel` (Telugu) appeared in the language list, confirming Tesseract supports all the languages I planned to test.
+
+The languages `fra` (French), `ita` (Italian), and `tel` (Telugu) appeared in the language list, confirming Tesseract supports all the languages I planned to test.
 
 ---
 
@@ -64,7 +78,7 @@ python3 -m venv docling-env
 source docling-env/bin/activate
 ```
 
-![Virtual Environment Activated](screenshots/docling-env.jpg)
+![Virtual Environment Activated](screenshots/screenshot-14-docling-env.jpg)
 
 ---
 
@@ -84,7 +98,9 @@ pip install easyocr
 docling --version
 ```
 
-![Docling Version](screenshots/docling-version.jpg)
+![Docling Version](screenshots/screenshot-15-docling-version.jpg)
+
+![Docling Version Details](screenshots/screenshot-16-docling-version2.jpg)
 
 **Output:**
 ```
@@ -96,7 +112,6 @@ Python: cpython-314 (3.14.3)
 Platform: macOS-14.4.1-arm64-arm-64bit-Mach-O
 ```
 
-![Docling Version Details](screenshots/docling_version2.jpg)
 
 ### EasyOCR Version
 
@@ -344,9 +359,6 @@ Unlike other engines like RapidOCR, Tesseract requires you to specify the correc
 │   ├── telugu-modern-ocrmac.md
 │   └── telugu-modern-rapidocr.md
 ├── screenshots/
-│   └── docling-env.jpg
-│   ├── docling-version.jpg
-│   ├── docling_version2.jpg
 │   ├── screenshot-1-tesseract-install.jpg
 │   ├── screenshot-2-tesseract-version.jpg
 │   ├── screenshot-3-tesseract-langs.jpg
@@ -355,10 +367,13 @@ Unlike other engines like RapidOCR, Tesseract requires you to specify the correc
 │   ├── screenshot-7-easyocr-version.jpg
 │   ├── screenshot-8-doctr-install.jpg
 │   ├── screenshot-9-rapid-ocr-install.png
-│   ├── rapid_ocr_french_english.png
-│   ├── rapid_ocr_italian.png
-│   ├── rapid_ocr_telugu.png
-│   └── rapid_ocr_telugu_modern.png
+│   ├── screenshot-10-rapidocr-french.png
+│   ├── screenshot-11-rapidocr-italian.png
+│   ├── screenshot-12-rapidocr-telugu.png
+│   ├── screenshot-13-rapidocr-telugu-modern.png
+│   ├── screenshot-14-docling-env.jpg
+│   ├── screenshot-15-docling-version.jpg
+│   └── screenshot-16-docling-version2.jpg
 └── README.md
 ```
 
