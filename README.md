@@ -112,6 +112,13 @@ Name: easyocr
 Version: 1.7.2
 ```
 
+### RapidOCR Version
+
+```bash
+pip show rapidocr-onnxruntime
+```
+
+![RapidOCR](screenshots/screenshot-9-rapid_ocr-install.png)
 ---
 
 ## Step 4 — OCR Engines Used
@@ -123,7 +130,7 @@ I tested three different OCR engines to compare their performance across languag
 | **Tesseract** | Classical OCR | Industry standard, 100+ language packs, open-source, widely documented |
 | **EasyOCR** | AI/Deep Learning | Modern approach, supports 80+ languages, interesting comparison with Tesseract |
 | **ocrmac** | Apple Vision Framework | Built into macOS no installation needed, interesting to see how Apple's built-in OCR performs |
-
+| **RapidOCR** | AI/Deep Learning | Fast, lightweight, no need to specify a language flag, simple installation |
 ---
 
 ## Step 5 — Documents Tested
@@ -203,6 +210,39 @@ docling --from pdf --to md --ocr --ocr-engine ocrmac \
   data/telugu-document.pdf
 ```
 
+### French — RapidOCR
+```bash
+docling --from pdf --to md --ocr --ocr-engine rapidocr \
+  data/french-english-textbook.pdf \
+  --output output/
+```
+ 
+ 
+### Italian — RapidOCR
+```bash
+docling --from pdf --to md --ocr --ocr-engine rapidocr \
+  data/italian-document.pdf \
+  --output output/
+```
+ 
+ 
+### Telugu Old Manuscript — RapidOCR
+```bash
+docling --from pdf --to md --ocr --ocr-engine rapidocr \
+  data/telugu-document.pdf \
+  --output output/
+```
+ 
+ 
+### Telugu Modern Novel — RapidOCR
+```bash
+docling --from pdf --to md --ocr --ocr-engine rapidocr \
+  data/telugu-modern.pdf \
+  --output output/
+```
+ 
+ 
+
 ---
 
 ## Step 7 — Key Findings
@@ -222,20 +262,64 @@ Apple Vision OCR worked well on French and Italian but produced unreadable outpu
 **5. Always specify the language flag**
 When I ran EasyOCR on Telugu without the language flag the output was wrong, but adding the correct language code immediately improved the results.
 
+**6. RapidOCR handles Latin scripts well but struggles with Indic scripts**
+RapidOCR gave clean output for French and Italian but struggled with both Telugu documents. It also auto-detects language, so no language flag is needed making it simpler to use for Latin-based documents.
+
 ---
+
+
+## Step 8 — OCR Engine Comparison
+ 
+### Evaluation Criteria
+Before comparing, here is what I used to evaluate each engine:
+- **Accuracy** — how correctly the text was extracted
+- **Speed** — how fast the processing was
+- **Language Support** — which languages and scripts are supported
+- **Complexity** — how easy it was to install and use
+ 
+### Comparison Table
+ 
+| Engine | Speed | Accuracy | Language Support | Complexity |
+|--------|-------|----------|-----------------|------------|
+| **Tesseract** | Medium | Good for all Latin, decent for modern Telugu | 100+ languages with language packs | High, needs separate language pack per language |
+| **EasyOCR** | Slow | Good for Latin, better than Tesseract on modern Telugu | 80+ languages | Easy, just pip install |
+| **ocrmac** | Fast | Good for Latin only | Limited, no Indic script support | Zero install on Mac |
+| **RapidOCR** | Fast | Good for Latin, poor for Indic | Limited Indic support | Easy, no language flag needed |
+ 
+---
+
+## Step 9 — Challenges and Limitations
+ 
+**1. Old Telugu manuscript failed on all engines**:
+The old-style script and font were too different from what modern OCR models are trained on, giving poor results across all engines
+ 
+**ocrmac does not support Indic scripts**:
+ocrmac is optimized for Latin-based languages and produced unreadable output for Telugu.
+ 
+**3. RapidOCR struggles with Indic scripts**:
+RapidOCR is not trained on Indic scripts and gave garbled output for both Telugu documents.
+ 
+**4. EasyOCR is very slow**: 
+EasyOCR took significantly longer than other engines, which can be a limitation for large documents.
+ 
+**5. Tesseract requires specifying a language code**: 
+Unlike other engines like RapidOCR, Tesseract requires you to specify the correct language code every time you run a command, otherwise the output will be incorrect.
 
 ## Discussion
 
 ### Why I Chose These OCR Engines
 
-- Tesseract felt like the obvious starting point it's the most well-known open-source OCR engine
-- I added EasyOCR to see how a modern AI-based approach compares to a classical one
-- ocrmac was interesting because it needs zero installation on Mac I was curious how Apple's built-in OCR holds up
-- Together these three cover classical, AI-based and platform-native OCR a good range to compare
+-  Tesseract felt like the obvious starting point, it's the most well-known open-source OCR engine.
+- I added EasyOCR to see how a modern AI-based approach compares to a classical one.
+- ocrmac was interesting because it needs zero installation on Mac, I was curious how Apple's built-in OCR holds up.
+- RapidOCR was added based on feedback to broaden my knowledge, it is fast, lightweight and does not require specifying a language flag, making it a great option for Latin-based documents.
+- Together these four cover classical, AI-based, platform-native, and fast lightweight OCR  a good range to compare.
+ 
 
 ---
 
 ## Repository Structure
+
 
 ```
 ├── data/
@@ -246,15 +330,19 @@ When I ran EasyOCR on Telugu without the language flag the output was wrong, but
 ├── output/
 │   ├── french-tesseract-output.md
 │   ├── french-ocrmac-output.md
+│   ├── french-rapidocr-output.md
 │   ├── italian-tesseract-output.md
 │   ├── italian-easyocr-output.md
 │   ├── italian-ocrmac-output.md
+│   ├── italian-rapidocr-output.md
 │   ├── telugu-tesseract-output.md
 │   ├── telugu-easyocr-output.md
 │   ├── telugu-ocrmac-output.md
+│   ├── telugu-rapidocr-output.md
 │   ├── telugu-modern-tesseract.md
 │   ├── telugu-modern-easyocr.md
-│   └── telugu-modern-ocrmac.md
+│   ├── telugu-modern-ocrmac.md
+│   └── telugu-modern-rapidocr.md
 ├── screenshots/
 │   └── docling-env.jpg
 │   ├── docling-version.jpg
@@ -265,7 +353,12 @@ When I ran EasyOCR on Telugu without the language flag the output was wrong, but
 │   ├── screenshot-4-tesseract-list-langs.jpg
 │   ├── screenshot-6-easyocr-install.jpg
 │   ├── screenshot-7-easyocr-version.jpg
-│   └── screenshot-8-doctr-install.jpg
+│   ├── screenshot-8-doctr-install.jpg
+│   ├── screenshot-9-rapid-ocr-install.png
+│   ├── rapid_ocr_french_english.png
+│   ├── rapid_ocr_italian.png
+│   ├── rapid_ocr_telugu.png
+│   └── rapid_ocr_telugu_modern.png
 └── README.md
 ```
 
@@ -277,6 +370,7 @@ When I ran EasyOCR on Telugu without the language flag the output was wrong, but
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
 - [EasyOCR](https://github.com/JaidedAI/EasyOCR)
 - [ocrmac](https://github.com/straussmaximilian/ocrmac)
+- [RapidOCR](https://github.com/RapidAI/RapidOCR)
 - [Outreachy Issue #123](https://gitlab.com/fedora/sigs/ai/ramalama/-/issues/123)
 - [Internet Archive](https://archive.org)
 
